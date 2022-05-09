@@ -50,6 +50,8 @@ import com.oracle.truffle.sl.nodes.SLBinaryNode;
 import com.oracle.truffle.sl.nodes.SLTypes;
 import com.oracle.truffle.sl.runtime.SLBigNumber;
 
+import java.io.*;   
+
 /**
  * SL node that performs the "+" operation, which performs addition on arbitrary precision numbers,
  * as well as String concatenation if one of the operands is a String.
@@ -80,6 +82,7 @@ public abstract class SLAddNode extends SLBinaryNode {
      */
     @Specialization(rewriteOn = ArithmeticException.class)
     protected long add(long left, long right) {
+        System.out.println(Math.addExact(left, right)); 
         return Math.addExact(left, right);
     }
 
@@ -98,6 +101,7 @@ public abstract class SLAddNode extends SLBinaryNode {
     @Specialization
     @TruffleBoundary
     protected SLBigNumber add(SLBigNumber left, SLBigNumber right) {
+        System.out.println(new SLBigNumber(left.getValue().add(right.getValue()))); 
         return new SLBigNumber(left.getValue().add(right.getValue()));
     }
 
@@ -112,6 +116,7 @@ public abstract class SLAddNode extends SLBinaryNode {
     @Specialization(guards = "isString(left, right)")
     @TruffleBoundary
     protected String add(Object left, Object right) {
+        System.out.println(left.toString() + right.toString());
         return left.toString() + right.toString();
     }
 
